@@ -10,6 +10,9 @@ const morgan = require('morgan');
 //Including the errorHandler middleware
 const errorHandler=require('./middleware/errorHandler');
 
+//Including the upload middleware
+const upload=require('./middleware/upload');
+
 //Connecting the database
 const connectDatabase=require('./config/db');
 
@@ -32,7 +35,8 @@ app.use(express.json());
 //Using the morgan
 app.use(morgan('tiny'));
 
-
+//Using the upload middleware
+app.use('/uploads',express.static('uploads'));
 //mounting the route
 app.use('/api/historyofnepal',route);
 

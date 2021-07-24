@@ -1,5 +1,10 @@
 const express = require('express');
 const router = express.Router();
+//const multer= require('multer');
+//var upload=multer({dest: 'uploads/'})
+
+//Including the upload middleware
+const upload=require('../middleware/upload');
 
 //Getting the functions of index
 const {
@@ -117,7 +122,7 @@ router
 router
 .route('/slides')
 .get(getSlide)
-.post(postSlide)
+.post(upload.single('sliderImage'),postSlide)
 router
 .route('/slides/:id')
 .put(putSlide)

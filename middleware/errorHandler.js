@@ -21,7 +21,9 @@ const errorHandler = (err, req, res, next) => {
         const message= Object.values(err.errors).map(val=>val.message);
         err= new ErrorResponse(message,400);
     }
-
+    
+ 
+    
     //Else the response
     res.status(err.statusCode || 500).json({
         status: false,
