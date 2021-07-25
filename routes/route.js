@@ -122,7 +122,7 @@ router
 router
 .route('/slides')
 .get(getSlide)
-.post(upload.single('sliderImage'),postSlide)
+.post(upload.array('sliderImage',5),postSlide)
 router
 .route('/slides/:id')
 .put(putSlide)

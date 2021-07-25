@@ -4,8 +4,11 @@ const Education = require('../models/Education');
 //Including the ErrorResponse Class
 const ErrorResponse = require('../utlis/errorResponse');
 
+//Including the asyncHandler
+const asyncHandler = require('../middleware/asyncHandler');
+
 //@desc getting all the education data
-exports.getEducation = async (req, res, next) => {
+exports.getEducation = asyncHandler(async (req, res, next) => {
 
     const education = await Education.find();
     res.status(200).json({
@@ -14,11 +17,11 @@ exports.getEducation = async (req, res, next) => {
         message: "Succesfully fetched all the education",
         data: education
     })
-}
+});
 
 
 //getting a single education data
-exports.getEducationSingle = async (req, res, next) => {
+exports.getEducationSingle = asyncHandler(async (req, res, next) => {
 
     const education = await Education.findById(req.params.id);
 
@@ -33,11 +36,11 @@ exports.getEducationSingle = async (req, res, next) => {
         message: "Succesfully fetched all the education",
         data: education
     })
-}
+});
 
 
 //@desc adding new education data
-exports.postEducation = async (req, res, next) => {
+exports.postEducation = asyncHandler(async (req, res, next) => {
 
     const education = await Education.create(req.body);
     res.status(201).json({
@@ -45,11 +48,11 @@ exports.postEducation = async (req, res, next) => {
         message: "Succesfully added new data",
         data: education
     })
-}
+});
 
 
 //@desc getting all the education data
-exports.putEducation = async (req, res, next) => {
+exports.putEducation = asyncHandler(async (req, res, next) => {
   
         let education= await Education.findById(req.params.id);
 
@@ -68,11 +71,11 @@ exports.putEducation = async (req, res, next) => {
             status: true,
             message: "Succesfully updated the data"
         })
-}
+});
 
 
 //@desc getting all the education data
-exports.deleteEducation = async (req, res, next) => {
+exports.deleteEducation = asyncHandler(async (req, res, next) => {
 
     const education = await Education.findById(req.params.id);
 
@@ -88,4 +91,4 @@ exports.deleteEducation = async (req, res, next) => {
         status: true,
         message: "Succesfully deleted data"
     })
-}
+});

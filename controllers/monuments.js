@@ -9,7 +9,7 @@ const Monument = require('../models/Monuments');
 
 
 //@desc getting all the monuments
-exports.getMonuments = async (req, res, next) => {
+exports.getMonuments =asyncHandler(async (req, res, next) => {
 
     const monument = await Monument.find();
     res.status(200).json({
@@ -17,12 +17,12 @@ exports.getMonuments = async (req, res, next) => {
         message: "Sucessfully fetched all the monuments",
         data: monument
     })
-}
+});
 
 
 //@desc Getting the single monument
 //@desc getting all the monuments
-exports.getMonumentSingle = async (req, res, next) => {
+exports.getMonumentSingle = asyncHandler(async (req, res, next) => {
 
     const monument = await Monument.find();
 
@@ -38,11 +38,11 @@ exports.getMonumentSingle = async (req, res, next) => {
         message: "Sucessfully fetched all the monuments",
         data: monument
     })
-}
+});
 
 
 //@desc posting new monumnets
-exports.postMonuments = asyncHandler(async (req, res, next) => {
+exports.postMonuments =asyncHandler(async (req, res, next) => {
 
     const monument = await Monument.create(req.body)
     res.status(201).json({
@@ -50,7 +50,7 @@ exports.postMonuments = asyncHandler(async (req, res, next) => {
         message: "Sucessfully added new monument",
         data: monument
     })
-})
+});
 
 
 //@desc updating the content of monumnets
@@ -74,7 +74,7 @@ exports.putMonuments = asyncHandler(async (req, res, next) => {
         message: "Successfully updated the monument",
         data: monument
     })
-})
+});
 
 
 //@desc deleting the monument
@@ -94,5 +94,5 @@ exports.deleteMonuments = asyncHandler(async (req, res, next) => {
         status: true,
         message: "Successfully deleted the monuments"
     })
-})
+});
 

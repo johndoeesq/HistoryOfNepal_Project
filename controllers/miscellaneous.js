@@ -1,9 +1,15 @@
 //Including the miscellaneous model
 const Miscellaneous = require('../models/Miscellaneous');
 
+//Including the errorHandler
+const ErrorResponse = require('../utlis/errorResponse');
+
+//Including the asyncHandler
+const asyncHandler = require('../middleware/asyncHandler');
+
 
 //@desc getting all the miscellaneous data
-exports.getMiscellaneous = async (req, res, next) => {
+exports.getMiscellaneous = asyncHandler(async (req, res, next) => {
     
         const miscellaneous = await Miscellaneous.find();
         res.status(200).json({
@@ -12,11 +18,11 @@ exports.getMiscellaneous = async (req, res, next) => {
             message: "Successfully fetched all the miscellaneous",
             data: miscellaneous
         })
-}
+});
 
 
 //getting single monuments
-exports.getMiscellaneousSingle = async (req, res, next) => {
+exports.getMiscellaneousSingle = asyncHandler(async (req, res, next) => {
    
         const miscellaneous = await Miscellaneous.findById(req.params.id);
 
@@ -32,11 +38,11 @@ exports.getMiscellaneousSingle = async (req, res, next) => {
             data: miscellaneous
         })
   
-}
+})
 
 
 //@desc adding new miscellaneous data
-exports.postMiscellaneous = async (req, res, next) => {
+exports.postMiscellaneous = asyncHandler(async (req, res, next) => {
     try {
         const miscellaneous = await Miscellaneous.create(req.body)
         res.status(200).json({
@@ -52,11 +58,11 @@ exports.postMiscellaneous = async (req, res, next) => {
         })
     }
 
-}
+});
 
 
 //@desc updating the miscellaneous data
-exports.putMiscellaneous = async (req, res, next) => {
+exports.putMiscellaneous = asyncHandler(async (req, res, next) => {
     
         let miscellaneous=await Miscellaneous.findById(req.params.id);
 
@@ -77,11 +83,11 @@ exports.putMiscellaneous = async (req, res, next) => {
             data: miscellaneous
         })
    
-}
+});
 
 
 //@desc getting all the miscellaneous data
-exports.deleteMiscellaneous = async (req, res, next) => {
+exports.deleteMiscellaneous = asyncHandler(async (req, res, next) => {
   
         const miscellaneous = await Miscellaneous.findById(req.params.id)
 
@@ -97,4 +103,4 @@ exports.deleteMiscellaneous = async (req, res, next) => {
             status: true,
             message: "Successfully deleted the data"
         })
-    }
+    });

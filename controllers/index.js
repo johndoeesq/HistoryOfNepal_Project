@@ -1,49 +1,55 @@
 //Including the model
 const Index = require('../models/Index');
 
+//Including the asyncHandler
+const asyncHandler = require('../middleware/asyncHandler');
+
+//Including the errorHandler
+const ErrorResponse = require('../utlis/errorResponse');
 
 //@desc for getting all the data
-exports.getIndexes = async (req, res, next) => {
+exports.getIndexes = asyncHandler(async (req, res, next) => {
+        const index = await Index.find();
 
-    try {
-        const index = await Index.find()
+        if(!index){
+            return next(
+                new ErrorResponse('No index data was found'),404
+            )
+        }
         res.status(200).json({
             status: true,
             message: "Fetched all the data",
             data: index
         })
-    }
-    catch (err) {
-        res.status(400).json({
-            status: false,
-            message: err.message
-
-        })
-    }
-}
+   
+});
 
 //@desc for posting new data
-exports.postIndex = async (req, res, next) => {
-    try {
+exports.postIndex =asyncHandler(async (req, res, next) => {
+   
         const index = await Index.create(req.body);
         res.status(200).json({
             status: true,
             data: index
         })
-    }
-    catch (err) {
-        res.status(400).json({
-            status: false,
-            message: err.message
-        })
-    }
-}
+   
+})
 
 
 //@desc for updating the data
-exports.putIndex = async (req, res, next) => {
-    try {
-        const index = await Index.findByIdAndUpdate(req.params.id, req.body, {
+exports.putIndex = asyncHandler(async (req, res, next) => {
+
+    let index= await Index.findById(req.params.id);
+
+    //Checking if index is there or not
+    if(!index){
+        return next(
+            new ErrorResponse('No index data was found'),404
+        )
+    }
+    
+    //Updating the index data
+    index = await Index.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
             runValidator: true
         })
@@ -52,32 +58,25 @@ exports.putIndex = async (req, res, next) => {
             message: `Data Successfully Updated`,
             data: index
         })
-    }
-    catch (err) {
-        res.status(400).json({
-            status: false,
-            message: err.message
-        })
-    }
-}
+});
 
 //@desc for deleting the data
-exports.deleteIndex = async (req, res, next) => {
-    try {
-        const index = await Index.findByIdAndDelete(req.params.id)
+exports.deleteIndex =asyncHandler(async (req, res, next) => {
+    
+       let index= await Index.findById(req.params.id);
+
+       //Checking if the index is there or not
+       if(!index){
+           return next(
+               new ErrorResponse('No Index data was found'),404
+           )
+       }
+
+       //Deleting the index data
+        await index.remove();
         res.status(200).json({
             status: true,
             message: `Successfully Deleted ${req.params.id} `,
         })
 
-    }
-
-    catch (err) {
-        res.status(400).json({
-            status: false,
-            message: err.message
-        })
-    }
-
-
-}
+})
