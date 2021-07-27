@@ -19,6 +19,7 @@ const IndexSchema=new mongoose.Schema({
     },
     sideImages:{
         type:[String],
+        maxlength:[2,'There should be only two images'],
         default:'side_img.jpg'
     }
     

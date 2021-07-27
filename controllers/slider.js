@@ -20,28 +20,30 @@ exports.getSlide= asyncHandler(async (req, res, next) => {
 
 //@desc posting new monumnets
 exports.postSlide = asyncHandler(async (req, res, next) => {
-      
-    //Checking if the file is there or not
-   if(req.files){
+        if(req.files){
        let path=''
-       req.files.forEach((files,index,arr)=>{
+       let paths=''
+       req.files.sliderImage.forEach((files,index,arr)=>{
            path=path+files.path+','
        })
+       req.files.pictures.forEach((files,index,arr)=>{
+        paths=paths+files.path+','
+    })
+       
        path=path.substring(0,path.lastIndexOf(","));
-       const slides= await Slide.create({path});
+       paths=paths.substring(0,paths.lastIndexOf(","));
+   
+       //0 is the start index and , is the end index
+       console.log(req.files.image)
+       const image=req.files.image[0].path
+       const slides= await Slide.create({sliderImage:path ,image,pictures:paths});
          res.status(201).json({
              status: true,
              message: "Sucessfully added new slide images",
              data: slides
          })
-}
-    // if(req.file){
-    //     const slides= await Slide.create(req.file);
-    //     res.status(201).json({
-    //         status:true,
-    //         message:"Successfully added the image"
-    //     })
-    // }
+        }
+
 });
 
 

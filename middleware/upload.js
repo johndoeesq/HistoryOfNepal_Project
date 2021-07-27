@@ -34,7 +34,7 @@ const multer= require('multer');
 //Decalring the storage
 var storage= multer.diskStorage({
     destination:function(req,file,cb){
-        cb(null,'uploads/');
+        cb(null,'uploads/slides/');
     },
     filename:function(req,file,cb){
      //Extracting the file extension
@@ -55,8 +55,9 @@ var upload=multer({
         
     },
     limits:{
-    fileSize:1024*1024*2
+    fileSize:1024*1024*8
     }
+    
 })
 
 

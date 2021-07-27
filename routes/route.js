@@ -4,42 +4,48 @@ const router = express.Router();
 //var upload=multer({dest: 'uploads/'})
 
 //Including the upload middleware
-const upload=require('../middleware/upload');
+const upload = require('../middleware/upload');
+
+//Including the uploadMonument middleware
+const uploadMon = require('../middleware/uploadMonument');
 
 //Getting the functions of index
 const {
     getIndexes,
     postIndex,
     putIndex,
-    deleteIndex } = require('../controllers/index');
+    deleteIndex,
+    uploadSideImages,
+    uploadSliderImages } = require('../controllers/index');
 
 //Getting all the functions of politics
-    const{
-        getPolitics,
-        getPoliticsSingle,
-        postPolitics,
-        putPolitics,
-        deletePolitics
-    }=require('../controllers/politics');
+const {
+    getPolitics,
+    getPoliticsSingle,
+    postPolitics,
+    putPolitics,
+    deletePolitics
+} = require('../controllers/politics');
 
 //Getting the functions of the monuments
-const{
+const {
     getMonuments,
     getMonumentSingle,
     postMonuments,
     putMonuments,
-    deleteMonuments
-}=require('../controllers/monuments');
+    deleteMonuments,
+    addMonumentSlides
+} = require('../controllers/monuments');
 
 
 //Getting all the functions for the education
-const{
+const {
     getEducation,
     getEducationSingle,
     postEducation,
     putEducation,
     deleteEducation
-}=require('../controllers/education');
+} = require('../controllers/education');
 
 
 //Getting the functions of the miscellaneous
@@ -69,17 +75,27 @@ router
     .put(putIndex)
     .delete(deleteIndex)
 
+router
+    .route('/index/:id/sideImages')
+    .put(upload.array('sideImages', 2), uploadSideImages)
+
+router
+    .route('/index/:id/sliderImages')
+    .put(upload.array('sliderImages', 2), uploadSliderImages)
 
 //Setting the router for the monuments
 router
     .route('/monuments')
     .get(getMonuments)
-    .post(postMonuments)
+    .post(uploadMon.single('image'), postMonuments)
 router
     .route('/monuments/:id')
     .get(getMonumentSingle)
     .put(putMonuments)
     .delete(deleteMonuments)
+router
+    .route('/monuments/:id/photo')
+    .put(upload.array('sliderImage', 5), addMonumentSlides)
 
 
 //Setting the routes for the politics
@@ -105,7 +121,7 @@ router
     .put(putEducation)
     .delete(deleteEducation)
 
-    
+
 //Setting the route for the miscellaneous
 router
     .route('/miscellaneous')
@@ -120,13 +136,16 @@ router
 
 //Setting the route for the Slider
 router
-.route('/slides')
-.get(getSlide)
-.post(upload.array('sliderImage',5),postSlide)
+    .route('/slides')
+    .get(getSlide)
+    .post(upload.fields([{
+        name:'sliderImage', maxCount:5},
+        {name:'image',maxCount:1},
+    {name:'pictures',maxCount:2}]), postSlide)
 router
-.route('/slides/:id')
-.put(putSlide)
-.delete(deleteSlide)
+    .route('/slides/:id')
+    .put(putSlide)
+    .delete(deleteSlide)
 
 
 //Exporting the router

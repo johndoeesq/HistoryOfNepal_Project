@@ -80,3 +80,42 @@ exports.deleteIndex =asyncHandler(async (req, res, next) => {
         })
 
 })
+
+//Adding the images in the side
+exports.uploadSideImages=asyncHandler(async(req,res,next)=>{
+    if(req.files){
+        let path=''
+        req.files.forEach((files,index,arr)=>{
+            path=path+files.path+','
+        })
+        path=path.substring(0,path.lastIndexOf(","));
+     //    Slide.sliderImage=path
+        //0 is the start index and , is the end index
+        const sideImage= await Index.findByIdAndUpdate(req.params.id,{sideImages:path});
+        console.log(sideImage)
+          res.status(201).json({
+              status: true,
+              message: "Sucessfully added new slide images",
+              data: sideImage
+          })
+ }
+})
+
+//Adding the images in the slider
+exports.uploadSliderImages=asyncHandler(async(req,res,next)=>{
+    if(req.files){
+        let path=''
+        req.files.forEach((files,index,arr)=>{
+            path=path+files.path+','
+        })
+        path=path.substring(0,path.lastIndexOf(","));
+        //0 is the start index and , is the end index
+        console.log(path)
+        const sliderImages= await Index.findByIdAndUpdate(req.params.id,{sliderImages:path});
+          res.status(201).json({
+              status: true,
+              message: "Sucessfully added new slide images",
+              data: sliderImages
+          })
+ }
+})
