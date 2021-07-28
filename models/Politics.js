@@ -18,6 +18,15 @@ const PoliticsSchema=new mongoose.Schema({
     description:{
         type:String,
         required:[true,'Description should be given']
+    },
+    createdAt:{
+        type:Date,
+        default:Date.now
+    },
+    user:{
+        type:mongoose.Schema.ObjectId,
+        ref:"User",
+        required:true
     }
 
 })

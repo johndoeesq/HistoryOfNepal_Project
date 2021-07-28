@@ -20,6 +20,11 @@ const IndexSchema=new mongoose.Schema({
     sideImages:{
         type:[String],
         maxlength:[2,'There should be only two images'],
+    },
+    user:{
+        type:mongoose.Schema.ObjectId,
+        ref:"User",
+        required:true
     }
     
 })
