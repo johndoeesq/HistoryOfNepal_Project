@@ -9,7 +9,8 @@ const asyncHandler = require('../middleware/asyncHandler');
 
 
 //@desc getting all the miscellaneous data
-exports.getMiscellaneous = asyncHandler(async (req, res, next) => {
+//Public
+exports.getAllMiscellaneous = asyncHandler(async (req, res, next) => {
     
         const miscellaneous = await Miscellaneous.find();
         res.status(200).json({
@@ -22,7 +23,8 @@ exports.getMiscellaneous = asyncHandler(async (req, res, next) => {
 
 
 //getting single monuments
-exports.getMiscellaneousSingle = asyncHandler(async (req, res, next) => {
+//Public
+exports.getSingleMiscellaneous= asyncHandler(async (req, res, next) => {
    
         const miscellaneous = await Miscellaneous.findById(req.params.id);
 
@@ -42,7 +44,8 @@ exports.getMiscellaneousSingle = asyncHandler(async (req, res, next) => {
 
 
 //@desc adding new miscellaneous data
-exports.postMiscellaneous = asyncHandler(async (req, res, next) => {
+//Private
+exports.createMiscellaneous = asyncHandler(async (req, res, next) => {
     try {
         const miscellaneous = await Miscellaneous.create(req.body)
         res.status(200).json({
@@ -62,11 +65,11 @@ exports.postMiscellaneous = asyncHandler(async (req, res, next) => {
 
 
 //@desc updating the miscellaneous data
-exports.putMiscellaneous = asyncHandler(async (req, res, next) => {
+exports.updateMiscellaneous = asyncHandler(async (req, res, next) => {
     
         let miscellaneous=await Miscellaneous.findById(req.params.id);
 
-        //Checking if the Miscellaneous exists
+        //Check if the Miscellaneous exists
         if(!miscellaneous){
             return next(
                 new ErrorResponse(`No Miscellaneous data with id:${req.params.id} found`),404);
@@ -87,11 +90,12 @@ exports.putMiscellaneous = asyncHandler(async (req, res, next) => {
 
 
 //@desc getting all the miscellaneous data
+//Private
 exports.deleteMiscellaneous = asyncHandler(async (req, res, next) => {
   
         const miscellaneous = await Miscellaneous.findById(req.params.id)
 
-        //Checking if the MIscellaneous exists
+        //Check if the Miscellaneous exists
         if(!miscellaneous){
             return next(
                 new ErrorResponse(`No Miscellaneous data with id:${req.params.id} found`),404);

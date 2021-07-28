@@ -9,7 +9,8 @@ const Politics = require('../models/Politics');
 
 
 //@desc getting all the politics data
-exports.getPolitics = asyncHandler(async (req, res, next) => {
+//Public
+exports.getAllPolitics = asyncHandler(async (req, res, next) => {
     const politics = await Politics.find();
     res.status(200).json({
         status: true,
@@ -21,7 +22,8 @@ exports.getPolitics = asyncHandler(async (req, res, next) => {
 
 
 //@desc getting single Politics data 
-exports.getPoliticsSingle = asyncHandler(async (req, res, next) => {
+//Public
+exports.getSinglePolitics = asyncHandler(async (req, res, next) => {
 
     const politics = await Politics.findById(req.params.id);
 
@@ -42,7 +44,8 @@ exports.getPoliticsSingle = asyncHandler(async (req, res, next) => {
 
 
 //@desc adding new politics data
-exports.postPolitics = asyncHandler(async (req, res, next) => {
+//Private
+exports.createPolitics = asyncHandler(async (req, res, next) => {
 
     const politics = await Politics.create(req.body);
     res.status(201).json({
@@ -55,12 +58,13 @@ exports.postPolitics = asyncHandler(async (req, res, next) => {
 
 
 //@desc getting all the politics data
-exports.putPolitics = asyncHandler(async (req, res, next) => {
+//Private
+exports.updatePolitics = asyncHandler(async (req, res, next) => {
 
     //Finding the specific politics data
     let politics = await Politics.findById(req.params.id);
 
-    //Checking if the politics is there or not
+    //Check if the politics exists
     if (!politics) {
         return next(
             new ErrorResponse(`No Politics data with id:${req.params.id} found`), 404)
@@ -80,17 +84,17 @@ exports.putPolitics = asyncHandler(async (req, res, next) => {
 
 
 //@desc getting all the politics data
+//Private
 exports.deletePolitics = asyncHandler(async (req, res, next) => {
 
     //Finding the specific politics data
     let politics = await Politics.findById(req.params.id);
 
-    //Checking if the politics is there or not
+    //Check if the politics exists
     if (!politics) {
         return next(
             new ErrorResponse(`No Politics data with id:${req.params.id} found`), 404)
     }
-
 
     //Removing the politics data
     await politics.remove();

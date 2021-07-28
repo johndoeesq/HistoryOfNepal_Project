@@ -7,8 +7,9 @@ const ErrorResponse = require('../utlis/errorResponse');
 //Including the asyncHandler
 const asyncHandler = require('../middleware/asyncHandler');
 
+
 //@desc getting all the education data
-exports.getEducation = asyncHandler(async (req, res, next) => {
+exports.getAllEducation = asyncHandler(async (req, res, next) => {
 
     const education = await Education.find();
     res.status(200).json({
@@ -21,11 +22,11 @@ exports.getEducation = asyncHandler(async (req, res, next) => {
 
 
 //getting a single education data
-exports.getEducationSingle = asyncHandler(async (req, res, next) => {
+exports.getSingleEducation = asyncHandler(async (req, res, next) => {
 
     const education = await Education.findById(req.params.id);
 
-    //Checking for the education existence
+    //Check if education exists
     if (!education) {
         return next(
             new ErrorResponse(`No Education data with id:${req.params.id} found`), 404);
@@ -40,7 +41,7 @@ exports.getEducationSingle = asyncHandler(async (req, res, next) => {
 
 
 //@desc adding new education data
-exports.postEducation = asyncHandler(async (req, res, next) => {
+exports.createEducation = asyncHandler(async (req, res, next) => {
 
     const education = await Education.create(req.body);
     res.status(201).json({
@@ -52,25 +53,25 @@ exports.postEducation = asyncHandler(async (req, res, next) => {
 
 
 //@desc getting all the education data
-exports.putEducation = asyncHandler(async (req, res, next) => {
-  
-        let education= await Education.findById(req.params.id);
+exports.updateEducation = asyncHandler(async (req, res, next) => {
 
-        //Checking if education exists
-        if(!education){
-            return next(
-                new ErrorResponse(`No Education data with id:${req.params.id} found`),404);
-        }
+    let education = await Education.findById(req.params.id);
 
-        //Updating the education
-        education = await Education.findByIdAndUpdate(req.params.id, req.body, {
-            new: true,
-            runValidators: true
-        })
-        res.status(200).json({
-            status: true,
-            message: "Succesfully updated the data"
-        })
+    //Check if education data exists
+    if (!education) {
+        return next(
+            new ErrorResponse(`No Education data with id:${req.params.id} found`), 404);
+    }
+
+    //Updating the education
+    education = await Education.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true
+    })
+    res.status(200).json({
+        status: true,
+        message: "Succesfully updated the data"
+    })
 });
 
 
@@ -79,7 +80,7 @@ exports.deleteEducation = asyncHandler(async (req, res, next) => {
 
     const education = await Education.findById(req.params.id);
 
-    //Checking if education data exists
+    //Check if education data exists
     if (!education) {
         return next(
             new ErrorResponse(`No Education data with id:${req.params.id} found`), 404);
@@ -89,6 +90,6 @@ exports.deleteEducation = asyncHandler(async (req, res, next) => {
     education.remove();
     res.status(200).json({
         status: true,
-        message: "Succesfully deleted data"
+        message: `Succesfully deleted data with id:${req.params.id}`
     })
 });

@@ -1,40 +1,10 @@
-// //Including the multer
-// const multer=require('multer');
-// const GridFsStorage=require('multer-gridfs-storage');
-
-// //Defining the storage
-// const storage=new GridFsStorage({
-//     url:process.env.MONGO_URI,
-//     options:{
-//         useNewParser:true,
-//         useUnifiedTopology:true
-//     },
-//     file:(req,res)=>{
-//         const match=["image/png","image/jpeg","image/jpg"];
-
-//    //Verifying for the mime type not found
-//    if(match.indexOf(file.mimetype)===-1){
-//        const filename= `${Date.now()}-any-name-${file.originalname}`;
-//        return filename;
-//    }
-//    return{
-//        bucketname:"photos",
-//        filename:`${Date.now()}-any-name-${file.originalname}`
-//    }
-//     }
-// })
-
-// module.exports=storage;
-
-
-
 const path= require('path');
 const multer= require('multer');
 
 //Decalring the storage
 var storage= multer.diskStorage({
     destination:function(req,file,cb){
-        cb(null,'uploads/slides/');
+        cb(null,'uploads/index');
     },
     filename:function(req,file,cb){
      //Extracting the file extension
@@ -46,6 +16,7 @@ var storage= multer.diskStorage({
 var upload=multer({
     storage:storage,
     fileFilter:function(req,file,callback){
+        //Checking for the MimeType
         if(file.mimetype==="image.png"||"image.jpg"){
             callback(null,true)
         }else{
@@ -55,7 +26,7 @@ var upload=multer({
         
     },
     limits:{
-    fileSize:1024*1024*8
+    fileSize:1024*1024*10
     }
     
 })

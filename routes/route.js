@@ -1,7 +1,7 @@
+/** @format */
+
 const express = require('express');
 const router = express.Router();
-//const multer= require('multer');
-//var upload=multer({dest: 'uploads/'})
 
 //Including the upload middleware
 const upload = require('../middleware/upload');
@@ -11,142 +11,119 @@ const uploadMon = require('../middleware/uploadMonument');
 
 //Getting the functions of index
 const {
-    getIndexes,
-    postIndex,
-    putIndex,
-    deleteIndex,
-    uploadSideImages,
-    uploadSliderImages } = require('../controllers/index');
+	getAllIndexes,
+	createIndex,
+	updateIndex,
+	deleteIndex,
+	uploadImages,
+} = require('../controllers/index');
 
 //Getting all the functions of politics
 const {
-    getPolitics,
-    getPoliticsSingle,
-    postPolitics,
-    putPolitics,
-    deletePolitics
+	getAllPolitics,
+	getSinglePolitics,
+	createPolitics,
+	updatePolitics,
+	deletePolitics,
 } = require('../controllers/politics');
 
 //Getting the functions of the monuments
 const {
-    getMonuments,
-    getMonumentSingle,
-    postMonuments,
-    putMonuments,
-    deleteMonuments,
-    addMonumentSlides
+	getAllMonuments,
+	getSingleMonument,
+	createMonuments,
+	updateMonuments,
+	deleteMonuments,
 } = require('../controllers/monuments');
-
 
 //Getting all the functions for the education
 const {
-    getEducation,
-    getEducationSingle,
-    postEducation,
-    putEducation,
-    deleteEducation
+	getAllEducation,
+	getSingleEducation,
+	createEducation,
+	updateEducation,
+	deleteEducation,
 } = require('../controllers/education');
-
 
 //Getting the functions of the miscellaneous
 const {
-    getMiscellaneous,
-    getMiscellaneousSingle,
-    postMiscellaneous,
-    putMiscellaneous,
-    deleteMiscellaneous } = require('../controllers/miscellaneous');
-
+	getAllMiscellaneous,
+	getSingleMiscellaneous,
+	createMiscellaneous,
+	updateMiscellaneous,
+	deleteMiscellaneous,
+} = require('../controllers/miscellaneous');
 
 //Getting all the functions for the slides
 const {
-    getSlide,
-    postSlide,
-    putSlide,
-    deleteSlide } = require('../controllers/slider');
-
+	getAllSlide,
+    getSingleSlide,
+	createSlide,
+	updateSlide,
+	deleteSlide,
+} = require('../controllers/slider');
 
 //Setting the routes for index
-router
-    .route('/index')
-    .get(getIndexes)
-    .post(postIndex)
-router
-    .route('/index/:id')
-    .put(putIndex)
-    .delete(deleteIndex)
+router.route('/index').get(getAllIndexes).post(createIndex);
+router.route('/index/:id').put(updateIndex).delete(deleteIndex);
 
-router
-    .route('/index/:id/sideImages')
-    .put(upload.array('sideImages', 2), uploadSideImages)
-
-router
-    .route('/index/:id/sliderImages')
-    .put(upload.array('sliderImages', 2), uploadSliderImages)
+router.route('/index/:id/photo').put(
+	upload.fields([
+		{ name: 'sideImages', maxCount: 2 },
+		{ name: 'sliderImages', maxCount: 2 },
+	]),
+	uploadImages
+);
 
 //Setting the router for the monuments
 router
-    .route('/monuments')
-    .get(getMonuments)
-    .post(uploadMon.single('image'), postMonuments)
+	.route('/monuments')
+	.get(getAllMonuments)
+	.post(uploadMon.single('image'), createMonuments);
 router
-    .route('/monuments/:id')
-    .get(getMonumentSingle)
-    .put(putMonuments)
-    .delete(deleteMonuments)
-router
-    .route('/monuments/:id/photo')
-    .put(upload.array('sliderImage', 5), addMonumentSlides)
-
+	.route('/monuments/:id')
+	.get(getSingleMonument)
+	.put(updateMonuments)
+	.delete(deleteMonuments);
 
 //Setting the routes for the politics
+router.route('/politics').get(getAllPolitics).post(createPolitics);
 router
-    .route('/politics')
-    .get(getPolitics)
-    .post(postPolitics)
-router
-    .route('/politics/:id')
-    .get(getPoliticsSingle)
-    .put(putPolitics)
-    .delete(deletePolitics)
-
+	.route('/politics/:id')
+	.get(getSinglePolitics)
+	.put(updatePolitics)
+	.delete(deletePolitics);
 
 //Setting the routes for the education
+router.route('/education').get(getAllEducation).post(createEducation);
 router
-    .route('/education')
-    .get(getEducation)
-    .post(postEducation)
-router
-    .route('/education/:id')
-    .get(getEducationSingle)
-    .put(putEducation)
-    .delete(deleteEducation)
-
+	.route('/education/:id')
+	.get(getSingleEducation)
+	.put(updateEducation)
+	.delete(deleteEducation);
 
 //Setting the route for the miscellaneous
 router
-    .route('/miscellaneous')
-    .get(getMiscellaneous)
-    .post(postMiscellaneous)
+	.route('/miscellaneous')
+	.get(getAllMiscellaneous)
+	.post(createMiscellaneous);
 router
-    .route('/miscellaneous/:id')
-    .get(getMiscellaneousSingle)
-    .put(putMiscellaneous)
-    .delete(deleteMiscellaneous)
-
+	.route('/miscellaneous/:id')
+	.get(getSingleMiscellaneous)
+	.put(updateMiscellaneous)
+	.delete(deleteMiscellaneous);
 
 //Setting the route for the Slider
 router
-    .route('/slides')
-    .get(getSlide)
-    .post(upload.fields([{
-        name:'sliderImage', maxCount:5},
-        {name:'image',maxCount:1},
-    {name:'pictures',maxCount:2}]), postSlide)
-router
-    .route('/slides/:id')
-    .put(putSlide)
-    .delete(deleteSlide)
+	.route('/slides')
+	.get(getAllSlide)
+	.post(upload.array('sliderImage', 5), createSlide);
 
+router
+	.route('/slides/:id')
+	.get(getSingleSlide)
+	.put(updateSlide)
+	.delete(deleteSlide);
 
 //Exporting the router
 module.exports = router;
