@@ -6,8 +6,7 @@ const MonumentSchema=new mongoose.Schema({
    
     image:{
         type:String,
-        //required:[true,'Image should be given'],
-        default:"no_img.jpg"
+        required:[true,'Image should be given']
     },
     title:{
         type:String,
@@ -18,10 +17,6 @@ const MonumentSchema=new mongoose.Schema({
     description:{
         type:String,
         required:[true,'Description should be given']
-    },
-    sliderImage:{
-        type:[String],
-        maxlength:[5,'There should not more than 5 images']
     },
     createdAt:{
         type:Date,

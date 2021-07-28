@@ -47,7 +47,20 @@ exports.getSinglePolitics = asyncHandler(async (req, res, next) => {
 //Private
 exports.createPolitics = asyncHandler(async (req, res, next) => {
 
-    const politics = await Politics.create(req.body);
+    //Checking if the file is there or not
+	 if (!req.file) {
+        return next(
+            new ErrorResponse(`No file found`,404)
+        )
+    }
+ 
+    //Creating an object
+    var data={
+        image: req.file.path,
+        title:req.body.title,
+        description:req.body.description
+   }
+    const politics = await Politics.create(data);
     res.status(201).json({
         status: true,
         message: "Succesfully added new data",

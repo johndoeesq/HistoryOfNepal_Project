@@ -57,7 +57,7 @@ const {
 //Getting all the functions for the slides
 const {
 	getAllSlide,
-    getSingleSlide,
+	getSingleSlide,
 	createSlide,
 	updateSlide,
 	deleteSlide,
@@ -79,7 +79,7 @@ router.route('/index/:id/photo').put(
 router
 	.route('/monuments')
 	.get(getAllMonuments)
-	.post(uploadMon.single('image'), createMonuments);
+	.post(upload.single('image'), createMonuments);
 router
 	.route('/monuments/:id')
 	.get(getSingleMonument)
@@ -87,7 +87,10 @@ router
 	.delete(deleteMonuments);
 
 //Setting the routes for the politics
-router.route('/politics').get(getAllPolitics).post(createPolitics);
+router
+	.route('/politics')
+	.get(getAllPolitics)
+	.post(upload.single('image'), createPolitics);
 router
 	.route('/politics/:id')
 	.get(getSinglePolitics)
@@ -95,7 +98,10 @@ router
 	.delete(deletePolitics);
 
 //Setting the routes for the education
-router.route('/education').get(getAllEducation).post(createEducation);
+router
+	.route('/education')
+	.get(getAllEducation)
+	.post(upload.single('image'), createEducation);
 router
 	.route('/education/:id')
 	.get(getSingleEducation)
@@ -106,7 +112,7 @@ router
 router
 	.route('/miscellaneous')
 	.get(getAllMiscellaneous)
-	.post(createMiscellaneous);
+	.post(upload.single('image'), createMiscellaneous);
 router
 	.route('/miscellaneous/:id')
 	.get(getSingleMiscellaneous)

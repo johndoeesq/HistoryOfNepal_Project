@@ -9,6 +9,9 @@ const asyncHandler = require('../middleware/asyncHandler');
 //Including the monument model
 const Monument = require('../models/Monuments');
 
+//Including the fs core module
+const fs=require('fs');
+
 //@desc getting all the monuments
 exports.getAllMonuments = asyncHandler(async (req, res, next) => {
 	const monument = await Monument.find();
@@ -41,21 +44,29 @@ exports.getSingleMonument = asyncHandler(async (req, res, next) => {
 
 //@desc posting new monumnets
 exports.createMonuments = asyncHandler(async (req, res, next) => {
+    
 	//Checking if the file is there or not
-	// if (req.file) {
-	//     let path = ''
-	//     req.file.forEach((file, index, arr) => {
-	//         path = path + file.path + ','
-	//     })
-	//     path = path.substring(0, path.lastIndexOf(","));
+	 if (!req.file) {
+         return next(
+             new ErrorResponse(`No file found`,404)
+         )
+     }
+  
+     //Creating an object
+     var data={
+         image: req.file.path,
+         title:req.body.title,
+         description:req.body.description
+    }
 
 	//Adding both the body and the images in the monuments
-	const monument = await Monument.create(req.body, { image: path });
+	const monument = await Monument.create(data);
 	res.status(201).json({
 		status: true,
 		message: 'Sucessfully added new monument',
-		data: monument,
+		data: monument
 	});
+
 });
 
 //@desc updating the content of monumnets
@@ -72,7 +83,7 @@ exports.updateMonuments = asyncHandler(async (req, res, next) => {
 	}
 
 	//Updating the monuments
-	monument = await Monument.findByIdAndUpdate(req.params.id, req.body, {
+	monument = await Monument.findOneAndUpdate(req.params.id, req.body, {
 		new: true,
 		runValidator: true,
 	});
@@ -104,35 +115,3 @@ exports.deleteMonuments = asyncHandler(async (req, res, next) => {
 	});
 });
 
-// //@desc posting new monumnets slides
-// //Private
-// exports.updateMonumentSlides = asyncHandler(async (req, res, next) => {
-// 	let monument = await Monument.findById(req.params.id);
-
-// 	//Check if the monument exists
-// 	if (!monument) {
-// 		return next(
-// 			new ErrorResponse(
-// 				`No resource found with the id: ${req.params.id}`,
-// 				404
-// 			)
-// 		);
-// 	}
-
-// 	//Checking if the file is there or not
-// 	if (req.files) {
-// 		let path = '';
-// 		req.files.forEach((files, index, arr) => {
-// 			path = path + files.path + ',';
-// 		});
-// 		path = path.substring(0, path.lastIndexOf(','));
-// 		monuments = await Monument.findOneAndUpdate({
-// 			sliderImage: path
-// 		});
-// 		res.status(201).json({
-// 			status: true,
-// 			message: 'Sucessfully added new slide images',
-// 			data: monuments
-// 		});
-// 	}
-// });
