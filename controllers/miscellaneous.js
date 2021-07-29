@@ -79,10 +79,28 @@ exports.updateMiscellaneous = asyncHandler(async (req, res, next) => {
 		);
 	}
 
+	//For image
+	if (req.file) {
+		//Creating the object
+		var data = {
+			image: req.file.path
+		};
+	}
+	var data = {
+		title: req.body.title,
+		description: req.body.description
+	};
+	//Updating the monuments
+	monument = await Monument.findOneAndUpdate(req.params.id, data, {
+		new: true,
+		runValidator: true
+	});
+
+
 	//Updating the miscellaneous data
-	miscellaneous = await Miscellaneous.findByIdAndUpdate(
+	miscellaneous = await Miscellaneous.findbyIdAndUpdate(
 		req.params.id,
-		req.body,
+		data,
 		{
 			new: true,
 			runValidators: true,

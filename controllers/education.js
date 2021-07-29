@@ -72,8 +72,22 @@ exports.updateEducation = asyncHandler(async (req, res, next) => {
 		);
 	}
 
+	//For image
+	if(req.file){
+		var data={
+			image:req.file.path
+		}
+	}
+    
+	//Creating the object
+	var data={
+		
+		title:req.body.title,
+		description:req.body.description
+	}
+
 	//Updating the education
-	education = await Education.findByIdAndUpdate(req.params.id, req.body, {
+	education = await Education.findOneAndUpdate(req.params.id, data, {
 		new: true,
 		runValidators: true,
 	});

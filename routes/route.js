@@ -6,9 +6,6 @@ const router = express.Router();
 //Including the upload middleware
 const upload = require('../middleware/upload');
 
-//Including the uploadMonument middleware
-const uploadMon = require('../middleware/uploadMonument');
-
 //Getting the functions of index
 const {
 	getAllIndexes,
@@ -83,7 +80,7 @@ router
 router
 	.route('/monuments/:id')
 	.get(getSingleMonument)
-	.put(updateMonuments)
+	.put(upload.single('image'), updateMonuments)
 	.delete(deleteMonuments);
 
 //Setting the routes for the politics
@@ -128,7 +125,7 @@ router
 router
 	.route('/slides/:id')
 	.get(getSingleSlide)
-	.put(updateSlide)
+	.put(upload.fields([{name:'sliderImage',maxCount :5}]), updateSlide)
 	.delete(deleteSlide);
 
 //Exporting the router

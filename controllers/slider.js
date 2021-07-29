@@ -47,7 +47,7 @@ exports.createSlide = asyncHandler(async (req, res, next) => {
 		req.files.forEach((files, index, arr) => {
 			path = path + files.path + ',';
 		});
-		path= path.substring(0, path.lastIndexOf(','));
+		path = path.substring(0, path.lastIndexOf(','));
 
 		const slides = await Slide.create({
 			sliderImage: path,
@@ -74,15 +74,29 @@ exports.updateSlide = asyncHandler(async (req, res, next) => {
 		);
 	}
 
-	//Updating the slide data
-	slides = await Slide.findOneAndUpdate(req.params.id, req.body, {
-		new: true,
-		runValidator: true,
-	});
-	res.status(200).json({
-		status: true,
-		message: 'Successfully updated the images',
-	});
+	if (req.files) {
+		let path = '';
+
+		req.files.sliderImage.forEach((files, index, arr) => {
+			path = path + files.path + ',';
+		});
+		path = path.substring(0, path.lastIndexOf(','));
+
+		var data = {
+			sliderImage: path,
+		};
+
+		//Updating the slide data
+		slides = await Slide.findByIdAndUpdate(req.params.id, data, {
+			new: true,
+			runValidator: true,
+		});
+		res.status(200).json({
+			status: true,
+			message: 'Successfully updated the images',
+			data:slides
+		});
+	}
 });
 
 //@desc deleting the monument

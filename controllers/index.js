@@ -48,7 +48,7 @@ exports.updateIndex = asyncHandler(async (req, res, next) => {
 	}
 
 	//Updating the index data
-	index = await Index.findByOneAndUpdate(req.params.id, req.body, {
+	index = await Index.findByIdAndUpdate(req.params.id, req.body, {
 		new: true,
 		runValidator: true,
 	});

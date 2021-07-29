@@ -10,7 +10,7 @@ const asyncHandler = require('../middleware/asyncHandler');
 const Monument = require('../models/Monuments');
 
 //Including the fs core module
-const fs=require('fs');
+const fs = require('fs');
 
 //@desc getting all the monuments
 exports.getAllMonuments = asyncHandler(async (req, res, next) => {
@@ -18,7 +18,7 @@ exports.getAllMonuments = asyncHandler(async (req, res, next) => {
 	res.status(200).json({
 		status: true,
 		message: 'Sucessfully fetched all the monuments',
-		data: monument,
+		data: monument
 	});
 });
 
@@ -38,26 +38,23 @@ exports.getSingleMonument = asyncHandler(async (req, res, next) => {
 	res.status(200).json({
 		status: true,
 		message: 'Sucessfully fetched all the monuments',
-		data: monument,
+		data: monument
 	});
 });
 
 //@desc posting new monumnets
 exports.createMonuments = asyncHandler(async (req, res, next) => {
-    
 	//Checking if the file is there or not
-	 if (!req.file) {
-         return next(
-             new ErrorResponse(`No file found`,404)
-         )
-     }
-  
-     //Creating an object
-     var data={
-         image: req.file.path,
-         title:req.body.title,
-         description:req.body.description
-    }
+	if (!req.file) {
+		return next(new ErrorResponse(`No file found`, 404));
+	}
+
+	//Creating an object
+	var data = {
+		image: req.file.path,
+		title: req.body.title,
+		description: req.body.description
+	};
 
 	//Adding both the body and the images in the monuments
 	const monument = await Monument.create(data);
@@ -66,7 +63,6 @@ exports.createMonuments = asyncHandler(async (req, res, next) => {
 		message: 'Sucessfully added new monument',
 		data: monument
 	});
-
 });
 
 //@desc updating the content of monumnets
@@ -81,16 +77,27 @@ exports.updateMonuments = asyncHandler(async (req, res, next) => {
 			404
 		);
 	}
-
+	if (req.file) {
+		//Creating the object
+		var data = {
+			image: req.file.path
+		};
+	}
+	
+	var data = {
+		title: req.body.title,
+		description: req.body.description
+	};
 	//Updating the monuments
-	monument = await Monument.findOneAndUpdate(req.params.id, req.body, {
+	monument = await Monument.findByIdAndUpdate(req.params.id, data, {
 		new: true,
-		runValidator: true,
+		runValidator: true
 	});
+
 	res.status(200).json({
 		status: true,
 		message: 'Successfully updated the monument',
-		data: monument,
+		data: monument
 	});
 });
 
@@ -111,7 +118,6 @@ exports.deleteMonuments = asyncHandler(async (req, res, next) => {
 	await monument.remove();
 	res.status(200).json({
 		status: true,
-		message: 'Successfully deleted the monuments',
+		message: 'Successfully deleted the monuments'
 	});
 });
-
