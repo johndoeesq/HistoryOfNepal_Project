@@ -85,7 +85,10 @@ exports.uploadImages = asyncHandler(async (req, res, next) => {
 	//Check for the index
 	if (!index) {
 		return next(
-			new ErrorResponse(`No resource found with the id ${req.params.id}`, 400)
+			new ErrorResponse(
+				`No resource found with the id ${req.params.id}`,
+				400
+			)
 		);
 	}
 	if (req.files) {
@@ -100,7 +103,10 @@ exports.uploadImages = asyncHandler(async (req, res, next) => {
 			sideImagepath = sideImagepath + files.path + ',';
 		});
 
-		sideImagepath = sideImagepath.substring(0, sideImagepath.lastIndexOf(','));
+		sideImagepath = sideImagepath.substring(
+			0,
+			sideImagepath.lastIndexOf(',')
+		);
 		sliderImagepath = sliderImagepath.substring(
 			0,
 			sliderImagepath.lastIndexOf(',')
