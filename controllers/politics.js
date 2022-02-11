@@ -15,8 +15,6 @@ exports.getAllPolitics = asyncHandler(async (req, res, next) => {
 	const politics = await Politics.find();
 	res.status(200).json({
 		status: true,
-		count: politics.length,
-		message: 'Succesfully fetched all the politics',
 		data: politics,
 	});
 });
@@ -29,16 +27,16 @@ exports.getSinglePolitics = asyncHandler(async (req, res, next) => {
 	//Checking if the politics exists or not
 	if (!politics) {
 		return next(
-			new ErrorResponse(`No Politics with the id ${req.params.id} found`),
-			404
+			new ErrorResponse(
+				`Politics with the id ${req.params.id}could not be found`,
+			),
+			404,
 		);
 	}
 
 	//Setting up the response
 	res.status(200).json({
 		status: true,
-		count: politics.length,
-		message: 'Succesfully fetched the politics',
 		data: politics,
 	});
 });
@@ -74,8 +72,10 @@ exports.updatePolitics = asyncHandler(async (req, res, next) => {
 	//Check if the politics exists
 	if (!politics) {
 		return next(
-			new ErrorResponse(`No Politics data with id:${req.params.id} found`),
-			404
+			new ErrorResponse(
+				`Politics data with id:${req.params.id} could not be found`,
+			),
+			404,
 		);
 	}
 
@@ -91,7 +91,7 @@ exports.updatePolitics = asyncHandler(async (req, res, next) => {
 		title: req.body.title,
 		description: req.body.description,
 	};
-    
+
 	//Updating the monuments
 	monument = await Monument.findByIdAndUpdate(req.params.id, data, {
 		new: true,
@@ -114,8 +114,10 @@ exports.deletePolitics = asyncHandler(async (req, res, next) => {
 	//Check if the politics exists
 	if (!politics) {
 		return next(
-			new ErrorResponse(`No Politics data with id:${req.params.id} found`),
-			404
+			new ErrorResponse(
+				`Politics data with id:${req.params.id} has already been deleted`,
+			),
+			404,
 		);
 	}
 

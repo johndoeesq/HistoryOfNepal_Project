@@ -15,11 +15,15 @@ exports.getAllIndexes = asyncHandler(async (req, res, next) => {
 	const index = await Index.find();
 
 	if (!index) {
-		return next(new ErrorResponse('No index data was found'), 404);
+		return next(
+			new ErrorResponse(
+				`Index data with id {req.params.id} could not be found`,
+			),
+			404,
+		);
 	}
 	res.status(200).json({
 		status: true,
-		message: 'Fetched all the data',
 		data: index,
 	});
 });
@@ -32,7 +36,6 @@ exports.createIndex = asyncHandler(async (req, res, next) => {
 
 	res.status(201).json({
 		status: true,
-		message: 'Sucessfully added new slide images',
 		data: index,
 	});
 });
@@ -44,7 +47,12 @@ exports.updateIndex = asyncHandler(async (req, res, next) => {
 
 	//Check if index exists
 	if (!index) {
-		return next(new ErrorResponse('No index data was found'), 404);
+		return next(
+			new ErrorResponse(
+				`Index data with id {$req.params.id} could not be found`,
+			),
+			404,
+		);
 	}
 
 	//Updating the index data
@@ -66,7 +74,12 @@ exports.deleteIndex = asyncHandler(async (req, res, next) => {
 
 	//Checking if the index is there or not
 	if (!index) {
-		return next(new ErrorResponse('No Index data was found'), 404);
+		return next(
+			new ErrorResponse(
+				`Index data with id {req.params.id} has already been deleted`,
+			),
+			404,
+		);
 	}
 
 	//Deleting the index data
@@ -87,8 +100,8 @@ exports.uploadImages = asyncHandler(async (req, res, next) => {
 		return next(
 			new ErrorResponse(
 				`No resource found with the id ${req.params.id}`,
-				400
-			)
+				400,
+			),
 		);
 	}
 	if (req.files) {
@@ -105,11 +118,11 @@ exports.uploadImages = asyncHandler(async (req, res, next) => {
 
 		sideImagepath = sideImagepath.substring(
 			0,
-			sideImagepath.lastIndexOf(',')
+			sideImagepath.lastIndexOf(','),
 		);
 		sliderImagepath = sliderImagepath.substring(
 			0,
-			sliderImagepath.lastIndexOf(',')
+			sliderImagepath.lastIndexOf(','),
 		);
 
 		const index = await Index.findOneAndUpdate({

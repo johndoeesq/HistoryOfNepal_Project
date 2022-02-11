@@ -9,16 +9,12 @@ const asyncHandler = require('../middleware/asyncHandler');
 //Including the monument model
 const Monument = require('../models/Monuments');
 
-//Including the fs core module
-const fs = require('fs');
-
 //@desc getting all the monuments
 exports.getAllMonuments = asyncHandler(async (req, res, next) => {
 	const monument = await Monument.find();
 	res.status(200).json({
 		status: true,
-		message: 'Sucessfully fetched all the monuments',
-		data: monument
+		data: monument,
 	});
 });
 
@@ -29,16 +25,17 @@ exports.getSingleMonument = asyncHandler(async (req, res, next) => {
 	//Checking if the monument exists
 	if (!monument) {
 		return next(
-			new ErrorResponse(`No Monument with the id ${req.params.id} found`),
-			404
+			new ErrorResponse(
+				`Monument with the id ${req.params.id} could not be found`,
+			),
+			404,
 		);
 	}
 
 	//Setting up the response
 	res.status(200).json({
 		status: true,
-		message: 'Sucessfully fetched all the monuments',
-		data: monument
+		data: monument,
 	});
 });
 
@@ -50,18 +47,17 @@ exports.createMonuments = asyncHandler(async (req, res, next) => {
 	}
 
 	//Creating an object
-	var data = {
+	let data = {
 		image: req.file.path,
 		title: req.body.title,
-		description: req.body.description
+		description: req.body.description,
 	};
 
 	//Adding both the body and the images in the monuments
 	const monument = await Monument.create(data);
 	res.status(201).json({
 		status: true,
-		message: 'Sucessfully added new monument',
-		data: monument
+		data: monument,
 	});
 });
 
@@ -73,31 +69,33 @@ exports.updateMonuments = asyncHandler(async (req, res, next) => {
 	//Checking if the monyment exists
 	if (!monument) {
 		return next(
-			new ErrorResponse(`No Monument with the id ${req.params.id} found`),
-			404
+			new ErrorResponse(
+				`Monument with the id ${req.params.id} could not be found`,
+			),
+			404,
 		);
 	}
 	if (req.file) {
 		//Creating the object
 		var data = {
-			image: req.file.path
+			image: req.file.path,
 		};
 	}
-	
+
 	var data = {
 		title: req.body.title,
-		description: req.body.description
+		description: req.body.description,
 	};
 	//Updating the monuments
 	monument = await Monument.findByIdAndUpdate(req.params.id, data, {
 		new: true,
-		runValidator: true
+		runValidator: true,
 	});
 
 	res.status(200).json({
 		status: true,
 		message: 'Successfully updated the monument',
-		data: monument
+		data: monument,
 	});
 });
 
@@ -109,8 +107,10 @@ exports.deleteMonuments = asyncHandler(async (req, res, next) => {
 	//Checking if the monuments exits or not
 	if (!monument) {
 		return next(
-			new ErrorResponse(`No Monument with the id ${req.params.id} found`),
-			404
+			new ErrorResponse(
+				`Monument with the id ${req.params.id} has already been deleted`,
+			),
+			404,
 		);
 	}
 
@@ -118,6 +118,6 @@ exports.deleteMonuments = asyncHandler(async (req, res, next) => {
 	await monument.remove();
 	res.status(200).json({
 		status: true,
-		message: 'Successfully deleted the monuments'
+		message: 'Successfully deleted the monuments',
 	});
 });

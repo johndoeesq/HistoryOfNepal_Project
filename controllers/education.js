@@ -14,8 +14,6 @@ exports.getAllEducation = asyncHandler(async (req, res, next) => {
 	const education = await Education.find();
 	res.status(200).json({
 		status: true,
-		count: education.length,
-		message: 'Succesfully fetched all the education',
 		data: education,
 	});
 });
@@ -27,14 +25,15 @@ exports.getSingleEducation = asyncHandler(async (req, res, next) => {
 	//Check if education exists
 	if (!education) {
 		return next(
-			new ErrorResponse(`No Education data with id:${req.params.id} found`),
-			404
+			new ErrorResponse(
+				`Education data with id:${req.params.id} could not be found`,
+			),
+			404,
 		);
 	}
 
 	res.status(200).json({
 		status: true,
-		message: 'Succesfully fetched all the education',
 		data: education,
 	});
 });
@@ -47,7 +46,7 @@ exports.createEducation = asyncHandler(async (req, res, next) => {
 	}
 
 	//Creating an object
-	var data = {
+	let data = {
 		image: req.file.path,
 		title: req.body.title,
 		description: req.body.description,
@@ -55,7 +54,6 @@ exports.createEducation = asyncHandler(async (req, res, next) => {
 	const education = await Education.create(data);
 	res.status(201).json({
 		status: true,
-		message: 'Succesfully added new data',
 		data: education,
 	});
 });
@@ -67,24 +65,25 @@ exports.updateEducation = asyncHandler(async (req, res, next) => {
 	//Check if education data exists
 	if (!education) {
 		return next(
-			new ErrorResponse(`No Education data with id:${req.params.id} found`),
-			404
+			new ErrorResponse(
+				`Education data with id:${req.params.id} could not be found`,
+			),
+			404,
 		);
 	}
 
 	//For image
-	if(req.file){
-		var data={
-			image:req.file.path
-		}
+	if (req.file) {
+		data = {
+			image: req.file.path,
+		};
 	}
-    
+
 	//Creating the object
-	var data={
-		
-		title:req.body.title,
-		description:req.body.description
-	}
+	data = {
+		title: req.body.title,
+		description: req.body.description,
+	};
 
 	//Updating the education
 	education = await Education.findOneAndUpdate(req.params.id, data, {
@@ -104,8 +103,10 @@ exports.deleteEducation = asyncHandler(async (req, res, next) => {
 	//Check if education data exists
 	if (!education) {
 		return next(
-			new ErrorResponse(`No Education data with id:${req.params.id} found`),
-			404
+			new ErrorResponse(
+				`Education data with id:${req.params.id} has already been deleted`,
+			),
+			404,
 		);
 	}
 

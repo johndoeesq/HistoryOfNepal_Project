@@ -15,8 +15,6 @@ exports.getAllMiscellaneous = asyncHandler(async (req, res, next) => {
 	const miscellaneous = await Miscellaneous.find();
 	res.status(200).json({
 		status: true,
-		count: miscellaneous.length,
-		message: 'Successfully fetched all the miscellaneous',
 		data: miscellaneous,
 	});
 });
@@ -30,15 +28,13 @@ exports.getSingleMiscellaneous = asyncHandler(async (req, res, next) => {
 	if (!miscellaneous) {
 		return next(
 			new ErrorResponse(
-				`No Miscellaneous data with id:${req.params.id} found`
+				`No Miscellaneous data with id:${req.params.id} found`,
 			),
-			404
+			404,
 		);
 	}
 	res.status(200).json({
 		status: true,
-		count: miscellaneous.length,
-		message: 'Successfully fetched all the miscellaneous',
 		data: miscellaneous,
 	});
 });
@@ -52,7 +48,7 @@ exports.createMiscellaneous = asyncHandler(async (req, res, next) => {
 	}
 
 	//Creating an object
-	var data = {
+	let data = {
 		image: req.file.path,
 		title: req.body.title,
 		description: req.body.description,
@@ -73,9 +69,9 @@ exports.updateMiscellaneous = asyncHandler(async (req, res, next) => {
 	if (!miscellaneous) {
 		return next(
 			new ErrorResponse(
-				`No Miscellaneous data with id:${req.params.id} found`
+				`Miscellaneous data with id:${req.params.id} could not be found`,
 			),
-			404
+			404,
 		);
 	}
 
@@ -83,29 +79,24 @@ exports.updateMiscellaneous = asyncHandler(async (req, res, next) => {
 	if (req.file) {
 		//Creating the object
 		var data = {
-			image: req.file.path
+			image: req.file.path,
 		};
 	}
 	var data = {
 		title: req.body.title,
-		description: req.body.description
+		description: req.body.description,
 	};
 	//Updating the monuments
 	monument = await Monument.findOneAndUpdate(req.params.id, data, {
 		new: true,
-		runValidator: true
+		runValidator: true,
 	});
 
-
 	//Updating the miscellaneous data
-	miscellaneous = await Miscellaneous.findbyIdAndUpdate(
-		req.params.id,
-		data,
-		{
-			new: true,
-			runValidators: true,
-		}
-	);
+	miscellaneous = await Miscellaneous.findbyIdAndUpdate(req.params.id, data, {
+		new: true,
+		runValidators: true,
+	});
 	res.status(200).json({
 		status: true,
 		message: 'Successfully updated the data',
@@ -122,9 +113,9 @@ exports.deleteMiscellaneous = asyncHandler(async (req, res, next) => {
 	if (!miscellaneous) {
 		return next(
 			new ErrorResponse(
-				`No Miscellaneous data with id:${req.params.id} found`
+				`Miscellaneous data with id:${req.params.id} has already been deleted`,
 			),
-			404
+			404,
 		);
 	}
 
